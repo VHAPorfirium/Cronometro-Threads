@@ -15,17 +15,21 @@ import java.util.List;
 
 public class LapAdapter extends RecyclerView.Adapter<LapAdapter.LapViewHolder> {
 
+    // Lista de voltas a exibir
     private List<Lap> lapList;
 
+    // Construtor recebe lista inicial de voltas
     public LapAdapter(List<Lap> lapList) {
         this.lapList = lapList;
     }
 
+    // Atualiza a lista de voltas e notifica o RecyclerView
     public void updateLaps(List<Lap> newLaps) {
         this.lapList = newLaps;
-        notifyDataSetChanged();
+        notifyDataSetChanged(); // redesenha todos os itens
     }
 
+    // Infla o layout de cada item de volta
     @NonNull
     @Override
     public LapViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,6 +38,7 @@ public class LapAdapter extends RecyclerView.Adapter<LapAdapter.LapViewHolder> {
         return new LapViewHolder(view);
     }
 
+    // Associa os dados da volta à ViewHolder
     @Override
     public void onBindViewHolder(@NonNull LapViewHolder holder, int position) {
         Lap lap = lapList.get(position);
@@ -42,16 +47,18 @@ public class LapAdapter extends RecyclerView.Adapter<LapAdapter.LapViewHolder> {
         );
     }
 
+    // Número total de voltas na lista
     @Override
     public int getItemCount() {
         return lapList == null ? 0 : lapList.size();
     }
 
+    // ViewHolder: mantém a referência ao TextView de cada volta
     static class LapViewHolder extends RecyclerView.ViewHolder {
         TextView tvLap;
         LapViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvLap = itemView.findViewById(R.id.tvLap);
+            tvLap = itemView.findViewById(R.id.tvLap); // encontra o TextView
         }
     }
 }

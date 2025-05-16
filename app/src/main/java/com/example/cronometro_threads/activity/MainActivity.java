@@ -22,17 +22,22 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ChronometerManager.ChronometerListener {
 
+    // Elementos da interface
     private TextView tvChrono;
-    private Button   btnStartPause, btnLap, btnReset;
+    private Button btnStartPause, btnLap, btnReset;
     private RecyclerView rvLaps;
+
+    // Adapter para lista de voltas
     private LapAdapter lapAdapter;
+    // Gerenciador do cronômetro
     private ChronometerManager chronoMgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); // carrega o layout
 
+        // Ajuste de margens para barras do sistema (opcional)
         ViewCompat.setOnApplyWindowInsetsListener(
                 findViewById(R.id.main),
                 (v, insets) -> {
@@ -44,45 +49,49 @@ public class MainActivity extends AppCompatActivity implements ChronometerManage
                 }
         );
 
-
-        tvChrono      = findViewById(R.id.tvChrono);
+        // Inicializa views
+        tvChrono = findViewById(R.id.tvChrono);
         btnStartPause = findViewById(R.id.btnStartPause);
-        btnLap        = findViewById(R.id.btnLap);
-        btnReset      = findViewById(R.id.btnReset);
-        rvLaps        = findViewById(R.id.rvLaps);
+        btnLap = findViewById(R.id.btnLap);
+        btnReset = findViewById(R.id.btnReset);
+        rvLaps = findViewById(R.id.rvLaps);
 
-        // RecyclerView
+        // Configura RecyclerView para exibir as voltas
         lapAdapter = new LapAdapter(new ArrayList<>());
         rvLaps.setLayoutManager(new LinearLayoutManager(this));
         rvLaps.setAdapter(lapAdapter);
 
-        // ChronometerManager
+        // Cria o gerenciador de cronômetro e exibe tempo inicial
         chronoMgr = new ChronometerManager(this);
         tvChrono.setText("00:00:00");
 
-        // Listeners
+        // Botão de iniciar/pausar
         btnStartPause.setOnClickListener(v -> {
             if (btnStartPause.getText().equals("Iniciar")) {
-                chronoMgr.start();
+                chronoMgr.start();           // inicia contagem
                 btnStartPause.setText("Pausar");
             } else {
-                chronoMgr.pause();
+                chronoMgr.pause();           // pausa contagem
                 btnStartPause.setText("Iniciar");
             }
         });
 
+        // Botão de registrar volta
         btnLap.setOnClickListener(v -> chronoMgr.lap());
+        // Botão de resetar cronômetro e voltas
         btnReset.setOnClickListener(v -> {
-            chronoMgr.reset();
+            chronoMgr.reset();              // zera tudo
             btnStartPause.setText("Iniciar");
         });
     }
 
+    // Atualiza o TextView a cada tick do cronômetro
     @Override
     public void onTick(String formattedTime) {
         tvChrono.setText(formattedTime);
     }
 
+    // Atualiza a lista de voltas quando houver mudança
     @Override
     public void onLapListUpdated(List<Lap> laps) {
         lapAdapter.updateLaps(laps);
